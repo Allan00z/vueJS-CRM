@@ -1,8 +1,12 @@
 <template>
-  <Navbar />
-  <div class="container">
-    <router-view/>
-  </div>
+  <v-app>
+    <Navbar />
+    <v-main>
+      <v-container>
+        <router-view/>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script lang="ts">

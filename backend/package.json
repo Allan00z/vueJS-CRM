@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "ts-node src/index.ts",
+		"dev": "nodemon src/index.js",
 		"generate-key-pair": "ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key"
 	},
 	"keywords": [],
@@ -28,6 +28,7 @@
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/morgan": "^1.9.10",
 		"@types/node": "^24.0.14",
+		"nodemon": "^3.1.10",
 		"prisma": "^6.12.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.8.3"

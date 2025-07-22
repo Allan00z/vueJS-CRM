@@ -1,19 +1,29 @@
 <template>
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <router-link to="/">CRM App</router-link>
-    </div>
-    <div class="navbar-menu">
-      <div v-if="!isLoggedIn">
-        <router-link to="/login" class="navbar-item">Connexion</router-link>
-        <router-link to="/register" class="navbar-item">Inscription</router-link>
-      </div>
-      <div v-else>
-        <span class="navbar-item">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
-        <a href="#" @click.prevent="logout" class="navbar-item">Déconnexion</a>
-      </div>
-    </div>
-  </nav>
+  <v-app-bar color="primary" density="compact" class="shadow-md">
+    <v-app-bar-title class="font-bold text-xl">
+      <router-link to="/" class="text-white no-underline">CRM App</router-link>
+    </v-app-bar-title>
+    <v-spacer></v-spacer>
+    <template v-if="!isLoggedIn">
+      <v-btn to="/login" variant="text" class="hover:bg-blue-700 transition-colors">
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+    </template>
+    <template v-else>
+      <v-btn to="/products" variant="text" class="hover:bg-blue-700 transition-colors mr-2">
+        <span class="text-white">Products</span>
+      </v-btn>
+      <v-btn to="/cart" variant="text" class="hover:bg-blue-700 transition-colors mr-2">
+        <v-icon>mdi-cart</v-icon>
+      </v-btn>
+      <v-chip class="mr-2 bg-blue-100">
+        {{ currentUser?.firstName }} {{ currentUser?.lastName }}
+      </v-chip>
+      <v-btn @click="logout" variant="text" class="hover:bg-blue-700 transition-colors">
+        <span class="text-white">Déconnexion</span>
+      </v-btn>
+    </template>
+  </v-app-bar>
 </template>
 
 <script lang="ts">
@@ -45,32 +55,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.navbar-menu {
-  display: flex;
-  gap: 15px;
-}
-
-.navbar-item {
+.no-underline {
   text-decoration: none;
-  color: #333;
-  padding: 5px 10px;
-}
-
-.navbar-item:hover {
-  color: #007bff;
 }
 </style>

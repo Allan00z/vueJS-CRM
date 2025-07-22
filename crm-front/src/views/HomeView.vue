@@ -1,73 +1,114 @@
 <template>
-  <div class="home">
-    <h1>Bienvenue sur votre CRM</h1>
-    <div v-if="isLoggedIn">
-      <p>Vous êtes connecté en tant que {{ currentUser?.firstName }} {{ currentUser?.lastName }}</p>
-      <p>Gérez vos clients et vos projets facilement.</p>
-    </div>
-    <div v-else>
-      <p>Veuillez vous connecter pour accéder à toutes les fonctionnalités.</p>
-      <div class="auth-buttons">
-        <router-link to="/login" class="btn btn-primary">Se connecter</router-link>
-        <router-link to="/register" class="btn btn-secondary">S'inscrire</router-link>
+  <!-- user logged in -->
+  <div v-if="!isLoggedIn" class="product-list">
+    <h1 class="text-h4 mb-4">Products</h1>
+    
+    <v-row>
+      <v-col cols="12" sm="6" md="4" lg="3" v-for="product in products" :key="product.id">
+        <ProductCard :product="product" />
+      </v-col>
+    </v-row>
+
+    <v-overlay v-model="loading" class="align-center justify-center">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </div>
+  
+  <!-- user not logged in -->
+  <div v-else class="text-center py-8">
+    <v-card class="mx-auto max-w-2xl bg-white shadow-lg rounded-xl p-6">
+      <h1 class="text-3xl font-bold text-blue-800 mb-6">Bienvenue sur votre CRM</h1>
+      
+      <div class="mb-6">
+        <p class="text-gray-600 mb-6">Veuillez vous connecter pour accéder à toutes les fonctionnalités.</p>
+        <div class="flex justify-center gap-4">
+          <v-btn to="/login" color="primary" class="px-6 hover:bg-blue-700 transition-colors">
+            Se connecter
+          </v-btn>
+          <v-btn to="/register" color="secondary" variant="outlined" class="px-6 hover:bg-gray-100 transition-colors">
+            S'inscrire
+          </v-btn>
+        </div>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import AuthService from '@/services/auth.service';
+import ProductCard from '@/components/ProductCard.vue';
+import ProductService from '@/services/product.service';
+import { Product } from '@/assets/types/product';
 
 export default defineComponent({
   name: 'HomeView',
-  data() {
-    return {
-      currentUser: null as any
+  components: {
+    ProductCard
+  },
+  setup() {
+    // ProductList data
+    const products = ref<Product[]>([]);
+    const loading = ref(true);
+    const error = ref('');
+
+    const fetchProducts = async () => {
+      try {
+        loading.value = true;
+        products.value = [
+          {
+            id: 1,
+            name: 'Product 1',
+            price: 100,
+            category: {id: 1, name: "", products: []}
+          },
+          {
+            id: 2,
+            name: 'Product 2',
+            price: 12,
+            category: {id: 1, name: "", products: []}
+          },
+          {
+            id: 3,
+            name: 'Product 3',
+            price: 4.95,
+            category: {id: 2, name: "", products: []}
+          }
+        ]
+        // const response = await ProductService.getAll();
+        // products.value = response.data;
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        error.value = 'Failed to load products. Please try again later.';
+      } finally {
+        console.log("salut")
+        loading.value = false;
+      }
     };
-  },
-  computed: {
-    isLoggedIn(): boolean {
-      return AuthService.isLoggedIn();
-    }
-  },
-  created() {
-    this.currentUser = AuthService.getCurrentUser();
+
+    const isLoggedIn = ref(AuthService.isLoggedIn());
+    const currentUser = ref(AuthService.getCurrentUser());
+
+    onMounted(() => {
+      // if (isLoggedIn.value) {
+      //   fetchProducts();
+      // }
+      fetchProducts();
+    });
+
+    return {
+      products,
+      loading,
+      error,
+      isLoggedIn,
+      currentUser
+    };
   }
 });
 </script>
 
 <style scoped>
-.home {
-  text-align: center;
+.product-list {
   padding: 20px;
-}
-
-h1 {
-  margin-bottom: 30px;
-}
-
-.auth-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.btn-primary {
-  background-color: #42b983;
-  color: white;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
 }
 </style>
