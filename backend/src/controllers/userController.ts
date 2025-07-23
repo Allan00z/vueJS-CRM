@@ -30,6 +30,8 @@ export async function readAll(_req, res) {
 			select: {
 				id: true,
 				email: true,
+				firstName: true,
+				lastName: true,
 				orders: true,
 			},
 		});
@@ -47,6 +49,8 @@ export async function readOne(req, res) {
 			select: {
 				id: true,
 				email: true,
+				firstName: true,
+				lastName: true,
 				orders: true,
 			},
 		});
@@ -82,6 +86,8 @@ export async function updateOne(req, res) {
 			select: {
 				id: true,
 				email: true,
+				firstName: true,
+				lastName: true,
 			},
 		});
 		res.status(201).json(oneUser);
