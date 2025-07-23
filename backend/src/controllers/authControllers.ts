@@ -1,5 +1,5 @@
 import prisma from "../../prisma/client";
-import { passwordVerification } from "../helpers/PasswordHelper";
+import { passwordVerification } from "../helpers/passwordHelper";
 
 export async function login(req, res, next) {
 	const { email, password } = req.body;
@@ -18,7 +18,6 @@ export async function login(req, res, next) {
 			if (!isVerified) {
 				res.status(401).send("Unauthorized");
 			} else {
-				delete user.password;
 				req.user = user;
 				next();
 			}

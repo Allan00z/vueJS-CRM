@@ -12,7 +12,7 @@ export async function createOne(req, res) {
 			const quantity = productOrder.quantity ?? 1;
 			products.push({
 				quantity,
-				totalPrice: quantity * price,
+				totalPrice: quantity * price.toNumber(),
 				id: productOrder.id,
 			});
 		}

@@ -3,7 +3,7 @@ import prisma from "../../prisma/client";
 export async function createOne(req, res) {
 	const data = {
 		price: req.body.price,
-		img: req.body.img,
+		// img: req.body.img,
 		name: req.body.name,
 		categoryId: req.body.categoryId,
 	};
@@ -70,7 +70,7 @@ export async function readOne(req, res) {
 export async function updateOne(req, res) {
 	const data = {
 		price: req.body.price,
-		img: req.body.img,
+		// img: req.body.img,
 		name: req.body.name,
 		categoryId: req.body.categoryId,
 	};

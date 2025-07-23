@@ -1,9 +1,14 @@
 import prisma from "../../prisma/client";
-import { passwordHasher } from "../helpers/PasswordHelper";
+import { passwordHasher } from "../helpers/passwordHelper";
 
 export async function createOne(req, res) {
 	const password = await passwordHasher(req.body.password);
-	const data = { password, email: req.body.email };
+	const data = {
+		password,
+		email: req.body.email as string,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+	};
 	try {
 		const newUser = await prisma.user.create({
 			data,
@@ -61,9 +66,14 @@ export async function updateOne(req, res) {
 	if (req.body.password) {
 		password = await passwordHasher(req.body.password);
 	}
-	const data = { password, email: req.body.email };
+	const data = {
+		password,
+		email: req.body.email,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+	};
 	if (req.payload.isAdmin) {
-		data.isAdmin = req.body.isAdmin;
+		data["isAdmin"] = req.body.isAdmin;
 	}
 	try {
 		const oneUser = await prisma.user.update({

@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "nodemon src/index.js",
+		"dev": "ts-node src/index.ts --watch",
 		"generate-key-pair": "ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key"
 	},
 	"keywords": [],
@@ -18,6 +18,7 @@
 		"body-parser": "^2.2.0",
 		"cors": "^2.8.5",
 		"express": "^5.1.0",
+		"http-errors": "^2.0.0",
 		"jsonwebtoken": "^9.0.2",
 		"morgan": "^1.10.1"
 	},

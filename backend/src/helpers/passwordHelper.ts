@@ -13,6 +13,6 @@ export async function passwordVerification(password, hashedPassword) {
 		return await bcrypt.compare(password, hashedPassword);
 	} catch (err) {
 		console.error(err);
-		res.status(500).send("Internal Error");
+		// res.status(500).send("Internal Error");
 	}
 }
