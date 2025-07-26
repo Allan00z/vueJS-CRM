@@ -1,5 +1,6 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"
+import { authStore } from '@/stores/auth';
 
 const API_URL = "http://localhost:3000/";
 
@@ -10,17 +11,13 @@ export default {
 			password,
 		});
 		if (response.data.token) {
-			const userInfos = jwtDecode(response.data.token);
-
-			localStorage.setItem("token", response.data.token);
-			localStorage.setItem("user", JSON.stringify(userInfos));
+			authStore.login(response.data.token, response.data.user);
 		}
 		return response.data;
 	},
 
 	logout() {
-		localStorage.removeItem("token");
-		localStorage.removeItem("user");
+		authStore.logout();
 	},
 
 	async register(
@@ -38,9 +35,7 @@ export default {
 	},
 
 	getCurrentUser() {
-		const userStr = localStorage.getItem("user");
-		if (userStr) return JSON.parse(userStr);
-		return null;
+		return authStore.state.user;
 	},
 
 	getToken() {
@@ -48,6 +43,6 @@ export default {
 	},
 
 	isLoggedIn() {
-		return !!this.getToken();
+		return authStore.state.isLoggedIn;
 	},
 };

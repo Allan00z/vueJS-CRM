@@ -1,6 +1,6 @@
 <template>
   <!-- user logged in -->
-  <div v-if="!isLoggedIn" class="product-list">
+  <div v-if="isLoggedIn" class="product-list">
     <h1 class="text-h4 mb-4">Products</h1>
     
     <v-row>
@@ -22,7 +22,7 @@
       <div class="mb-6">
         <p class="text-gray-600 mb-6">Veuillez vous connecter pour accéder à toutes les fonctionnalités.</p>
         <div class="flex justify-center gap-4">
-          <v-btn to="/login" color="primary" class="px-6 hover:bg-blue-700 transition-colors">
+          <v-btn to="/login" color="primary" class="px-6 hover:bg-blue-700 transition-colors mr-4">
             Se connecter
           </v-btn>
           <v-btn to="/register" color="secondary" variant="outlined" class="px-6 hover:bg-gray-100 transition-colors">
@@ -55,33 +55,12 @@ export default defineComponent({
     const fetchProducts = async () => {
       try {
         loading.value = true;
-        products.value = [
-          {
-            id: 1,
-            name: 'Product 1',
-            price: 100,
-            category: {id: 1, name: "", products: []}
-          },
-          {
-            id: 2,
-            name: 'Product 2',
-            price: 12,
-            category: {id: 1, name: "", products: []}
-          },
-          {
-            id: 3,
-            name: 'Product 3',
-            price: 4.95,
-            category: {id: 2, name: "", products: []}
-          }
-        ]
-        // const response = await ProductService.getAll();
-        // products.value = response.data;
+        const response = await ProductService.getAll();
+        products.value = response.data;
       } catch (err) {
         console.error('Error fetching products:', err);
         error.value = 'Failed to load products. Please try again later.';
       } finally {
-        console.log("salut")
         loading.value = false;
       }
     };

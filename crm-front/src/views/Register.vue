@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 	import { reactive } from "vue";
-	import axios from "axios";
+	import AuthService from '@/services/auth.service';
 
 	interface RegisterForm {
 		firstName: string;
@@ -47,8 +47,9 @@
 
 	const handleSubmit = async () => {
 		try {
-			const response = await axios.post("http://localhost:3000/user", form);
+			const response = await AuthService.register(form.firstName, form.lastName, form.email, form.password);
 			console.log("Succès:", response.data);
+
 		} catch (error: any) {
 			console.error("Erreur:", error.response?.data || error.message);
 		}

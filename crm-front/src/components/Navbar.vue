@@ -6,7 +6,7 @@
     <v-spacer></v-spacer>
     <template v-if="!isLoggedIn">
       <v-btn to="/login" variant="text" class="hover:bg-blue-700 transition-colors">
-        <v-icon>mdi-login</v-icon>
+        <v-icon>mdi-login-variant</v-icon>
       </v-btn>
     </template>
     <template v-else>
@@ -16,11 +16,11 @@
       <v-btn to="/cart" variant="text" class="hover:bg-blue-700 transition-colors mr-2">
         <v-icon>mdi-cart</v-icon>
       </v-btn>
-      <v-chip class="mr-2 bg-blue-100">
-        {{ currentUser?.firstName }} {{ currentUser?.lastName }}
-      </v-chip>
+      <v-btn to="/profile" variant="text" class="hover:bg-blue-700 transition-colors mr-2">
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
       <v-btn @click="logout" variant="text" class="hover:bg-blue-700 transition-colors">
-        <span class="text-white">Déconnexion</span>
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
     </template>
   </v-app-bar>
@@ -29,17 +29,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import AuthService from '@/services/auth.service';
+import { authStore } from '@/stores/auth';
 
 export default defineComponent({
   name: 'NavBar',
-  data() {
-    return {
-      currentUser: null as any
-    };
-  },
   computed: {
     isLoggedIn(): boolean {
-      return AuthService.isLoggedIn();
+      return authStore.state.isLoggedIn;
+    },
+    currentUser() {
+      return authStore.state.user;
     }
   },
   methods: {
@@ -47,9 +46,6 @@ export default defineComponent({
       AuthService.logout();
       this.$router.push('/login');
     }
-  },
-  created() {
-    this.currentUser = AuthService.getCurrentUser();
   }
 });
 </script>

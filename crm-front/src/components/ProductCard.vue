@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-2" max-width="344">
+  <v-card class="mx-auto my-2" max-width="350">
     <v-card-title>{{ product.name }}</v-card-title>
     <v-card-subtitle>{{ product.category?.name || 'No category' }}</v-card-subtitle>
     <v-card-text>
@@ -9,11 +9,15 @@
       <v-btn color="primary" @click="addToCart">Add to Cart</v-btn>
       <v-spacer></v-spacer>
     </v-card-actions>
+    
+    <div v-if="showNotification" class="notification">
+      {{ notificationMessage }}
+    </div>
   </v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface Product {
@@ -36,6 +40,8 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter();
+    const showNotification = ref(false);
+    const notificationMessage = ref('');
 
     const formatPrice = (price: number): string => {
       return new Intl.NumberFormat('en-US', {
@@ -72,13 +78,48 @@ export default defineComponent({
       }
       
       localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${props.product.name} added to cart`);
+      
+      // Show notification instead of alert
+      notificationMessage.value = `${props.product.name} added to cart`;
+      showNotification.value = true;
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        showNotification.value = false;
+      }, 3000);
     };
 
     return {
       formatPrice,
-      addToCart
+      addToCart,
+      showNotification,
+      notificationMessage
     };
   }
 });
 </script>
+
+<style scoped>
+.position-relative {
+  position: relative;
+}
+
+.notification {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(76, 175, 80, 1);
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>

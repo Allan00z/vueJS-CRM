@@ -41,15 +41,17 @@ const router = createRouter({
 
 // check authentication for protected routes
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register'];
-  const authRequired = !publicPages.includes(to.path);
+  const publicPages = ['/login', '/register', '/'];
   const loggedIn = AuthService.isLoggedIn();
 
-  if (authRequired && !loggedIn) {
-    next('/login');
+  if ((to.path === '/login' || to.path === '/register') && loggedIn) {
+    next({ path: '/', replace: true });
+  } else if (!publicPages.includes(to.path) && !loggedIn) {
+    next({ path: '/login', replace: true });
   } else {
     next();
   }
 });
+
 
 export default router
