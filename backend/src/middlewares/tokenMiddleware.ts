@@ -22,7 +22,8 @@ export function generateToken(req, res) {
 	try {
 		const payload = {
 			userId: req.user.id,
-			email: req.user.email,
+			firstName: req.user.firstName,
+			lastName: req.user.lastName,
 			isAdmin: req.user.isAdmin,
 		};
 		const token = sign(payload, privateKey, {
