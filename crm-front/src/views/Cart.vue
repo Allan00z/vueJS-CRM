@@ -54,7 +54,7 @@
         </div>
         
         <v-btn color="primary" block class="checkout-btn" @click="checkout">
-          Procéder au paiement
+          Confirmer la commande
         </v-btn>
       </div>
     </div>
