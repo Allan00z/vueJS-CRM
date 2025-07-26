@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const API_URL = "http://localhost:3000/";
 
@@ -9,8 +10,10 @@ export default {
 			password,
 		});
 		if (response.data.token) {
+			const userInfos = jwtDecode(response.data.token);
+
 			localStorage.setItem("token", response.data.token);
-			localStorage.setItem("user", JSON.stringify(response.data.user));
+			localStorage.setItem("user", JSON.stringify(userInfos));
 		}
 		return response.data;
 	},
