@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 interface Product {
   id: number;
@@ -39,7 +38,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const router = useRouter();
     const showNotification = ref(false);
     const notificationMessage = ref('');
 
@@ -65,10 +63,8 @@ export default defineComponent({
       const existingItemIndex = cart.findIndex((item: any) => item.id === props.product.id);
       
       if (existingItemIndex >= 0) {
-        // +1 if product already in cart
         cart[existingItemIndex].quantity += 1;
       } else {
-        // add if not in cart
         cart.push({
           id: props.product.id,
           name: props.product.name,
@@ -79,11 +75,9 @@ export default defineComponent({
       
       localStorage.setItem('cart', JSON.stringify(cart));
       
-      // Show notification instead of alert
       notificationMessage.value = `${props.product.name} added to cart`;
       showNotification.value = true;
       
-      // Hide notification after 3 seconds
       setTimeout(() => {
         showNotification.value = false;
       }, 3000);

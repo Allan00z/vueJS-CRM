@@ -18,7 +18,6 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import ProductCard from '@/components/ProductCard.vue';
 import ProductService from '@/services/product.service';
-// Import types
 import { Product } from '@/assets/types/product'
 
 export default defineComponent({

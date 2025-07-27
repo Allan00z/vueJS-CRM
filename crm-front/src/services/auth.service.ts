@@ -11,7 +11,7 @@ export default {
 			password,
 		});
 		if (response.data.token) {
-			authStore.login(response.data.token, response.data.user);
+			authStore.login(response.data.token);
 		}
 		return response.data;
 	},

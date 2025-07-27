@@ -4,7 +4,6 @@
       <h1>My Profile</h1>
     </div>
 
-    <!-- User Info Update Form -->
     <div class="profile-section">
       <h2>Personal Information</h2>
       <form @submit.prevent="updateProfile" class="profile-form">
@@ -41,7 +40,6 @@
       </form>
     </div>
 
-    <!-- Orders List -->
     <div class="profile-section">
       <h2>My Orders</h2>
       <div v-if="ordersLoading" class="loading">Loading orders...</div>
@@ -65,6 +63,10 @@
         </div>
       </div>
     </div>
+    
+    <div v-if="showNotification" class="notification" :class="notificationType">
+      {{ notificationMessage }}
+    </div>
   </div>
 </template>
 
@@ -83,6 +85,9 @@ const userForm = ref({
 const orders = ref<Order[]>([])
 const loading = ref(false)
 const ordersLoading = ref(false)
+const showNotification = ref(false)
+const notificationMessage = ref('')
+const notificationType = ref('success')
 
 const loadUserData = async () => {
   try {
@@ -109,10 +114,10 @@ const updateProfile = async () => {
     if (!user) return
     
     await UserService.update(user.userId || user.id, userForm.value)
-    alert('Profile updated successfully!')
+    showTemporaryMessage('Profile updated successfully!', 'success')
   } catch (error) {
     console.error('Error updating profile:', error)
-    alert('Error updating profile')
+    showTemporaryMessage('Error updating profile', 'error')
   } finally {
     loading.value = false
   }
@@ -120,6 +125,16 @@ const updateProfile = async () => {
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString()
+}
+
+const showTemporaryMessage = (message: string, type: 'success' | 'error' = 'success') => {
+  notificationMessage.value = message
+  notificationType.value = type
+  showNotification.value = true
+  
+  setTimeout(() => {
+    showNotification.value = false
+  }, 3000)
 }
 
 onMounted(() => {
@@ -232,5 +247,30 @@ onMounted(() => {
   text-align: center;
   padding: 20px;
   color: #666;
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.notification.success {
+  background-color: #4caf50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

@@ -58,6 +58,10 @@
         </v-btn>
       </div>
     </div>
+    
+    <div v-if="showNotification" class="notification" :class="notificationType">
+      {{ notificationMessage }}
+    </div>
   </div>
 </template>
 
@@ -80,6 +84,9 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const cartItems = ref<CartItem[]>([]);
+    const showNotification = ref(false);
+    const notificationMessage = ref('');
+    const notificationType = ref('success');
     
     // Load cart from localStorage
     const loadCartFromStorage = () => {
@@ -141,11 +148,21 @@ export default defineComponent({
         await OrderService.create(orderData);
         localStorage.removeItem('cart');
         cartItems.value = [];
-        alert('Commande confirmée avec succès!');
+        showTemporaryMessage('Commande confirmée avec succès!', 'success');
       } catch (error) {
         console.error('Erreur lors de la création de la commande:', error);
-        alert('Erreur lors de la confirmation de la commande');
+        showTemporaryMessage('Erreur lors de la confirmation de la commande', 'error');
       }
+    };
+
+    const showTemporaryMessage = (message: string, type: 'success' | 'error' = 'success') => {
+      notificationMessage.value = message;
+      notificationType.value = type;
+      showNotification.value = true;
+      
+      setTimeout(() => {
+        showNotification.value = false;
+      }, 3000);
     };
 
     return {
@@ -157,7 +174,10 @@ export default defineComponent({
       increaseQuantity,
       decreaseQuantity,
       removeItem,
-      confirmCommand
+      confirmCommand,
+      showNotification,
+      notificationMessage,
+      notificationType
     };
   }
 });
@@ -253,5 +273,30 @@ export default defineComponent({
 
 .confirm-btn {
   margin-top: 16px;
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.notification.success {
+  background-color: #4caf50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

@@ -56,7 +56,6 @@ export default defineComponent({
       
       try {
         await AuthService.login(this.email, this.password)
-        // Redirect to dashboard or home
         this.$router.push('/')
       } catch (error: any) {
         if (error.response) {
