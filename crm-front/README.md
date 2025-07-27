@@ -15,5 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Build the production folder
+```
+cd dist
+python3 -m http.server 8080
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
