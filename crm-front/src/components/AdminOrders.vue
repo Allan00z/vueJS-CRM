@@ -8,20 +8,8 @@
 				:headers="headers"
 				:items="orders"
 				:loading="loading"
-				:search="search"
 				class="elevation-1"
 			>
-				<template v-slot:top>
-					<v-text-field
-						v-model="search"
-						label="Rechercher une commande"
-						prepend-inner-icon="mdi-magnify"
-						variant="outlined"
-						density="compact"
-						class="mx-4 mt-4"
-						style="max-width: 300px"
-					></v-text-field>
-				</template>
 				<template v-slot:item.user="{ item }">
 					{{ item.user?.firstName }} {{ item.user?.lastName }}
 				</template>
@@ -65,13 +53,12 @@
 			return {
 				orders: [] as Order[],
 				loading: false,
-				search: "",
 				showDetailsModal: false,
 				selectedOrderId: null as number | null,
 				headers: [
 					{ title: "Utilisateur", key: "user", sortable: false },
-					{ title: "Prix total", key: "totalPrice", sortable: true },
 					{ title: "Date", key: "createdAt", sortable: true },
+					{ title: "Prix total", key: "totalPrice", sortable: true },
 					{ title: "Actions", key: "actions", sortable: false, width: "80px" },
 				],
 			};

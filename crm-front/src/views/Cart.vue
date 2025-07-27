@@ -13,7 +13,6 @@
 			<v-list class="cart-items">
 				<div v-for="(item, index) in cartItems" :key="index" class="cart-item">
 					<div class="item-info">
-						<div class="item-image"></div>
 						<div>
 							<h3 class="item-name">{{ item.name }}</h3>
 							<div class="category-frame">{{ item.category }}</div>

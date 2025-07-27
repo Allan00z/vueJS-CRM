@@ -55,11 +55,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const publicPages = ["/login", "/register", "/"];
 	const loggedIn = AuthService.isLoggedIn();
+	const currentUser = AuthService.getCurrentUser();
 
 	if ((to.path === "/login" || to.path === "/register") && loggedIn) {
 		next({ path: "/", replace: true });
 	} else if (!publicPages.includes(to.path) && !loggedIn) {
 		next({ path: "/login", replace: true });
+	} else if (to.path === "/admin" && !currentUser.isAdmin) {
+		next({ path: "/", replace: true });
 	} else {
 		next();
 	}

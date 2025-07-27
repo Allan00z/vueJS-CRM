@@ -19,7 +19,7 @@
 				variant="text"
 				class="hover:bg-blue-700 transition-colors mr-2"
 			>
-				<span class="text-white">Products</span>
+				<span class="text-white">Produits</span>
 			</v-btn>
 			<v-btn
 				to="/cart"

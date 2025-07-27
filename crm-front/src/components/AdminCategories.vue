@@ -34,7 +34,7 @@
 
 				<template v-slot:item.products="{ item }">
 					<v-chip color="info" variant="tonal" size="small">
-						{{ item.products?.length || 0 }} produit(s)
+						{{ item?._count?.products || 0 }} produit(s)
 					</v-chip>
 				</template>
 
@@ -53,7 +53,7 @@
 						color="error"
 						variant="text"
 						@click="confirmDelete(item)"
-						:disabled="item.products?.length > 0"
+						:disabled="item?._count ? item?._count.products > 0 : false"
 					></v-btn>
 				</template>
 
@@ -136,7 +136,10 @@
 		computed: {
 			deleteMessage(): string {
 				if (this.categoryToDelete) {
-					if (this.categoryToDelete.products?.length > 0) {
+					if (
+						this.categoryToDelete?._count &&
+						this.categoryToDelete?._count.products > 0
+					) {
 						return `Impossible de supprimer la catégorie "${this.categoryToDelete.name}" car elle contient des produits.`;
 					}
 					return `Êtes-vous sûr de vouloir supprimer la catégorie "${this.categoryToDelete.name}" ?`;
@@ -205,8 +208,10 @@
 			async handleDeleteCategory() {
 				if (!this.categoryToDelete) return;
 
-				// Vérifier si la catégorie contient des produits
-				if (this.categoryToDelete.products?.length > 0) {
+				if (
+					this.categoryToDelete?._count &&
+					this.categoryToDelete?._count.products > 0
+				) {
 					this.showNotification(
 						"Impossible de supprimer une catégorie contenant des produits",
 						"error"

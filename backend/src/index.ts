@@ -4,23 +4,12 @@ import bodyParser from "body-parser";
 import logger from "morgan";
 import path from "path";
 import createError from "http-errors";
+import dotenv from "dotenv";
 
-// import authRoutes from "./routes/auth";
-// import productRoutes from "./routes/product";
-
-// const app = express();
-
-// app.use(cors());
-
-// app.use("/api/auth", authRoutes);
-// app.use("api/products", productRoutes);
-
-// app.listen(PORT, () => {
-// 	console.log(`Serveur démarré sur http://localhost:${PORT}`);
-// });
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -29,11 +18,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(
 	cors({
-		origin: "http://localhost:8080",
+		origin: process.env.FRONT_URL || "http://localhost:8080",
 		optionsSuccessStatus: 200,
 	})
 );
-
 // Import routers
 // Use Routers
 // const indexRouter = require('./routers/indexRouter');

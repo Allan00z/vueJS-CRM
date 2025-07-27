@@ -15,8 +15,15 @@ export async function createOne(req, res) {
 
 export async function readAll(_req, res) {
 	try {
-		const allCategorys = await prisma.category.findMany();
-		res.status(200).json(allCategorys);
+		const allCategories = await prisma.category.findMany({
+			include: {
+				_count: {
+					select: { products: true },
+				},
+			},
+		});
+
+		res.status(200).json(allCategories);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json("Error get categorys");

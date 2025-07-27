@@ -8,12 +8,12 @@
 				</div>
 				<div v-else-if="order">
 					<div class="order-detail-row">
-						<span class="label">Prix total :</span>
-						<span>{{ order.totalPrice }} €</span>
-					</div>
-					<div class="order-detail-row">
 						<span class="label">Date :</span>
 						<span>{{ formatDate(order.createdAt) }}</span>
+					</div>
+					<div class="order-detail-row">
+						<span class="label">Prix total :</span>
+						<span>{{ order.totalPrice }} €</span>
 					</div>
 					<v-divider class="my-4" />
 					<div>

@@ -16,10 +16,6 @@ export function isOwner(req, res, next) {
 		);
 		return res.status(401).send("Invalid token");
 	}
-	console.log(req.payload);
-	console.log(req.payload.userId);
-	console.log(req.params.id);
-	console.log(req.payload.isAdmin);
 	if (req.payload.userId === parseInt(req.params.id) || req.payload.isAdmin)
 		next();
 	else res.sendStatus(403);
