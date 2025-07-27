@@ -22,6 +22,15 @@
 						style="max-width: 300px"
 					></v-text-field>
 				</template>
+				<template v-slot:item.user="{ item }">
+					{{ item.user?.firstName }} {{ item.user?.lastName }}
+				</template>
+				<template v-slot:item.totalPrice="{ item }">
+					{{ item.totalPrice }} €
+				</template>
+				<template v-slot:item.createdAt="{ item }">
+					{{ formatDate(item.createdAt) }}
+				</template>
 				<template v-slot:item.actions="{ item }">
 					<v-btn
 						icon="mdi-eye"
@@ -47,21 +56,22 @@
 	import { defineComponent } from "vue";
 	import ModalOrderDetails from "./ModalOrderDetails.vue";
 	import orderService from "@/services/order.service";
+	import { Order } from "@/assets/types/order";
 
 	export default defineComponent({
 		name: "AdminOrders",
 		components: { ModalOrderDetails },
 		data() {
 			return {
-				orders: [],
+				orders: [] as Order[],
 				loading: false,
 				search: "",
 				showDetailsModal: false,
-				selectedOrderId: null,
+				selectedOrderId: null as number | null,
 				headers: [
 					{ title: "Utilisateur", key: "user", sortable: false },
 					{ title: "Prix total", key: "totalPrice", sortable: true },
-					{ title: "Date", key: "date", sortable: true },
+					{ title: "Date", key: "createdAt", sortable: true },
 					{ title: "Actions", key: "actions", sortable: false, width: "80px" },
 				],
 			};
@@ -81,9 +91,14 @@
 					this.loading = false;
 				}
 			},
-			showOrderDetails(order: any) {
+			showOrderDetails(order: Order) {
 				this.selectedOrderId = order.id;
 				this.showDetailsModal = true;
+			},
+			formatDate(date: string) {
+				if (!date) return "";
+				const d = new Date(date);
+				return d.toLocaleDateString("fr-FR");
 			},
 		},
 	});

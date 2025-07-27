@@ -8,14 +8,6 @@
 				</div>
 				<div v-else-if="order">
 					<div class="order-detail-row">
-						<span class="label">Utilisateur :</span>
-						<span
-							>{{ order.user?.firstName }} {{ order.user?.lastName }} ({{
-								order.user?.email
-							}})</span
-						>
-					</div>
-					<div class="order-detail-row">
 						<span class="label">Prix total :</span>
 						<span>{{ order.totalPrice }} €</span>
 					</div>
