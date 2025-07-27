@@ -54,13 +54,11 @@ export async function readAll(_req, res) {
 	try {
 		const allOrders = await prisma.order.findMany({
 			include: {
-				products: {
-					include: {
-						product: {
-							include: {
-								category: true,
-							},
-						},
+				user: {
+					select: {
+						firstName: true,
+						lastName: true,
+						email: true,
 					},
 				},
 			},

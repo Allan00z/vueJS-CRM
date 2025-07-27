@@ -1,16 +1,16 @@
-import axios from 'axios';
-import AuthService from './auth.service';
+import axios from "./http.interceptor";
+import { User } from "@/assets/types/user";
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = "http://localhost:3000/user";
 
-export default {
-  async getOne(id: number) {
-    const token = AuthService.getToken();
-    return await axios.get(`${API_URL}user/${id}`);
-  },
+class UserService {
+	async getAll() {
+		return await axios.get<User[]>(API_URL);
+	}
 
-  async update(id: number, userData: any) {
-    const token = AuthService.getToken();
-    return await axios.put(`${API_URL}user/${id}`, userData);
-  }
-};
+	async update(id: number, userData: any) {
+		return await axios.put(`${API_URL}/${id}`, userData);
+	}
+}
+
+export default new UserService();

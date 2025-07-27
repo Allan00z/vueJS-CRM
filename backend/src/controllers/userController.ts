@@ -32,6 +32,7 @@ export async function readAll(_req, res) {
 				email: true,
 				firstName: true,
 				lastName: true,
+				isAdmin: true,
 				orders: true,
 			},
 		});

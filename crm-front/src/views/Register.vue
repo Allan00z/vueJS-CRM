@@ -22,14 +22,16 @@
 				<input v-model="form.password" type="password" id="password" required />
 			</div>
 
-			<button type="submit">Créer un compte</button>
+			<button type="submit" :disabled="loading">
+				{{ loading ? "Création en cours..." : "Créer un compte" }}
+			</button>
 		</form>
 	</div>
 </template>
 
-<script lang="ts" setup>
-	import { reactive } from "vue";
-	import AuthService from '@/services/auth.service';
+<script lang="ts">
+	import { defineComponent, reactive } from "vue";
+	import AuthService from "@/services/auth.service";
 
 	interface RegisterForm {
 		firstName: string;
@@ -38,22 +40,40 @@
 		password: string;
 	}
 
-	const form = reactive<RegisterForm>({
-		firstName: "",
-		lastName: "",
-		email: "",
-		password: "",
+	export default defineComponent({
+		name: "Register",
+		data() {
+			return {
+				form: reactive<RegisterForm>({
+					firstName: "",
+					lastName: "",
+					email: "",
+					password: "",
+				}),
+				loading: false,
+			};
+		},
+		methods: {
+			async handleSubmit() {
+				this.loading = true;
+
+				try {
+					const response = await AuthService.register(
+						this.form.firstName,
+						this.form.lastName,
+						this.form.email,
+						this.form.password
+					);
+					console.log("Succès:", response.data);
+					await AuthService.login(this.form.email, this.form.password);
+					// Redirection vers le dashboard ou la page d'accueil
+					this.$router.push("/");
+				} catch (error: any) {
+					console.error("Erreur:", error.response?.data || error.message);
+				}
+			},
+		},
 	});
-
-	const handleSubmit = async () => {
-		try {
-			const response = await AuthService.register(form.firstName, form.lastName, form.email, form.password);
-			console.log("Succès:", response.data);
-
-		} catch (error: any) {
-			console.error("Erreur:", error.response?.data || error.message);
-		}
-	};
 </script>
 
 <style scoped>

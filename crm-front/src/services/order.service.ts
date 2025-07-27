@@ -1,12 +1,20 @@
-import axios from 'axios';
-import AuthService from './auth.service';
-import { Order } from '@/assets/types/order';
+import axios from "./http.interceptor";
+import { Order } from "@/assets/types/order";
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = "http://localhost:3000/order";
 
-export default {
-  async create(orderData: any) {
-    const token = AuthService.getToken();
-    return await axios.post(`${API_URL}order`, orderData);
-  },
-};
+class OrderService {
+	getAll() {
+		return axios.get(API_URL);
+	}
+
+	getOne(id: number) {
+		return axios.get(`${API_URL}/${id}`);
+	}
+
+	create(order: any) {
+		return axios.post(API_URL, order);
+	}
+}
+
+export default new OrderService();
