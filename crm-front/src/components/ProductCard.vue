@@ -69,7 +69,8 @@ export default defineComponent({
           id: props.product.id,
           name: props.product.name,
           price: props.product.price,
-          quantity: 1
+          quantity: 1,
+          category: props.product.category?.name || 'No category'
         });
       }
       
