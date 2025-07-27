@@ -8,6 +8,10 @@ class UserService {
 		return await axios.get<User[]>(API_URL);
 	}
 
+	async getOne(id: number) {
+		return await axios.get(`${API_URL}/${id}`);
+	}
+
 	async update(id: number, userData: any) {
 		return await axios.put(`${API_URL}/${id}`, userData);
 	}
