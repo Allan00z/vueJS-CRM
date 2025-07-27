@@ -33,29 +33,9 @@ export default defineComponent({
 
     const fetchProducts = async () => {
       try {
-        // loading.value = true;
-        // const response = await ProductService.getAll();
-        // products.value = response.data;
-        products.value = [
-          {
-            category: {id: 1, name:"", products: []},
-            id: 1,
-            name: 'Product 1',
-            price: 100
-          },
-          {
-            category: {id: 1, name:"", products: []},
-            id: 2,
-            name: 'Product 2',
-            price: 20.51
-          },
-          {
-            category: {id: 1, name:"", products: []},
-            id: 3,
-            name: 'Product 3',
-            price: 31.98
-          }
-        ] as Product[]
+        loading.value = true;
+        const response = await ProductService.getAll();
+        products.value = response.data;
       } catch (err) {
         console.error('Error fetching products:', err);
         error.value = 'Failed to load products. Please try again later.';

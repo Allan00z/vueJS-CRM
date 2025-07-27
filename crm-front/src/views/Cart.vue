@@ -53,7 +53,7 @@
           <span>{{ formatPrice(total) }}</span>
         </div>
         
-        <v-btn color="primary" block class="checkout-btn" @click="checkout">
+        <v-btn color="primary" block class="confirm-btn" @click="confirmCommand">
           Confirmer la commande
         </v-btn>
       </div>
@@ -63,6 +63,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import OrderService from '@/services/order.service';
+import AuthService from '@/services/auth.service';
+import { Order } from '@/assets/types/order';
 
 interface CartItem {
   id: number;
@@ -74,26 +78,9 @@ interface CartItem {
 export default defineComponent({
   name: 'CartView',
   setup() {
-
+    const router = useRouter();
     const cartItems = ref<CartItem[]>([]);
-    // Fixture test
-    // const cartItems = ref<CartItem[]>([
-    //   {
-    //     id: 1,
-    //     name: "Verre",
-    //     price: 12.20,
-    //     quantity: 1
-    //   },
-    //   {
-    //     id: 2,
-    //     name: "Fourchette",
-    //     price: 5.9,
-    //     quantity: 2
-    //   }
-    // ]);
     
-    // localStorage.setItem("cart", JSON.stringify(cartItems.value));
-
     // Load cart from localStorage
     const loadCartFromStorage = () => {
       const cartData = localStorage.getItem("cart");
@@ -106,7 +93,6 @@ export default defineComponent({
       }
     };
     
-    // Initialize cart from localStorage
     loadCartFromStorage();
 
     const subtotal = computed(() => {
@@ -122,27 +108,44 @@ export default defineComponent({
 
     const increaseQuantity = (index: number) => {
       cartItems.value[index].quantity++;
-      // Update localStorage after changing quantity
       localStorage.setItem("cart", JSON.stringify(cartItems.value));
     };
 
     const decreaseQuantity = (index: number) => {
       if (cartItems.value[index].quantity > 1) {
         cartItems.value[index].quantity--;
-        // Update localStorage after changing quantity
         localStorage.setItem("cart", JSON.stringify(cartItems.value));
       }
     };
 
     const removeItem = (index: number) => {
       cartItems.value.splice(index, 1);
-      // Update localStorage after removing item
       localStorage.setItem("cart", JSON.stringify(cartItems.value));
     };
 
-    const checkout = () => {
-      alert('Redirection vers la page de paiement...');
-      // Ici vous pourriez implémenter la logique de paiement ou rediriger vers une page de paiement
+    const confirmCommand = async () => {
+      try {
+        const user = AuthService.getCurrentUser();
+        if (!user) {
+          router.push('/login');
+          return;
+        }
+
+        const orderData = {
+          order: cartItems.value.map(item => ({
+            id: item.id,
+            quantity: item.quantity
+          }))
+        };
+
+        await OrderService.create(orderData);
+        localStorage.removeItem('cart');
+        cartItems.value = [];
+        alert('Commande confirmée avec succès!');
+      } catch (error) {
+        console.error('Erreur lors de la création de la commande:', error);
+        alert('Erreur lors de la confirmation de la commande');
+      }
     };
 
     return {
@@ -154,7 +157,7 @@ export default defineComponent({
       increaseQuantity,
       decreaseQuantity,
       removeItem,
-      checkout
+      confirmCommand
     };
   }
 });
@@ -248,7 +251,7 @@ export default defineComponent({
   font-size: 1.125rem;
 }
 
-.checkout-btn {
+.confirm-btn {
   margin-top: 16px;
 }
 </style>

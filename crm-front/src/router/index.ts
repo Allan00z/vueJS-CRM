@@ -4,6 +4,7 @@ import Register from '@/views/Register.vue'
 import Login from '@/views/Login.vue'
 import Cart from '@/views/Cart.vue'
 import ProductList from '@/views/ProductList.vue'
+import Profile from '@/views/Profile.vue'
 import AuthService from '@/services/auth.service'
 
 const routes: Array<RouteRecordRaw> = [
@@ -31,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/products',
     name: 'ProductList',
     component: ProductList
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   }
 ]
 
